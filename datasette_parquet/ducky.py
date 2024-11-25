@@ -83,7 +83,16 @@ class DuckDatabase(Database):
             raise Exception('non-threaded mode not supported')
 
         def in_thread():
-            return fn(self.conn)
+            try:
+                return fn(self.conn)
+            except duckdb.OperationalError as e:
+                raise sqlite3.OperationalError(str(e))
+            except duckdb.ProgrammingError as e:
+                raise sqlite3.ProgrammingError(str(e))
+            except duckdb.InternalError as e:
+                raise sqlite3.InternalError(str(e))
+            except duckdb.DataError as e:
+                raise sqlite3.DatabaseError(str(e))
 
         return await asyncio.get_event_loop().run_in_executor(
             self.ds.executor, in_thread
@@ -94,7 +103,16 @@ class DuckDatabase(Database):
             raise Exception('non-threaded mode not supported')
 
         def in_thread():
-            return fn(self.conn)
+            try:
+                return fn(self.conn)
+            except duckdb.OperationalError as e:
+                raise sqlite3.OperationalError(str(e))
+            except duckdb.ProgrammingError as e:
+                raise sqlite3.ProgrammingError(str(e))
+            except duckdb.InternalError as e:
+                raise sqlite3.InternalError(str(e))
+            except duckdb.DataError as e:
+                raise sqlite3.DatabaseError(str(e))
 
         # We lie, we'll always block.
         return await asyncio.get_event_loop().run_in_executor(
