@@ -1,5 +1,6 @@
 import asyncio
 import duckdb
+import sqlite3
 from .debounce import debounce
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, LoggingEventHandler
@@ -118,4 +119,3 @@ class DuckDatabase(Database):
         return await asyncio.get_event_loop().run_in_executor(
             self.ds.executor, in_thread
         )
-
